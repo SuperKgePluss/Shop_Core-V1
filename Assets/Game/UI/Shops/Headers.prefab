@@ -36,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -452.80997, y: 0}
-  m_SizeDelta: {x: -1171.1599, y: 0}
+  m_AnchoredPosition: {x: -463.37, y: 0}
+  m_SizeDelta: {x: -1192.3, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6634399793696443544
 CanvasRenderer:
@@ -230,8 +230,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -493.0094, y: 0}
-  m_SizeDelta: {x: 215.5978, y: 0}
+  m_AnchoredPosition: {x: -502.22803, y: 0}
+  m_SizeDelta: {x: 234.035, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3452516884522535999
 CanvasRenderer:
@@ -307,8 +307,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -819.59863, y: 0}
-  m_SizeDelta: {x: 399.8216, y: 0}
+  m_AnchoredPosition: {x: -839.38, y: 0}
+  m_SizeDelta: {x: 400.26, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1163307009813243271
 CanvasRenderer:
@@ -437,6 +437,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: Price
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 1353758359950561204, guid: b0290d81306b0eb4e97acc40b19fbcd6,
         type: 3}
@@ -572,6 +587,21 @@ PrefabInstance:
       propertyPath: m_text
       value: Item
       objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 1353758359950561204, guid: b0290d81306b0eb4e97acc40b19fbcd6,
         type: 3}
       propertyPath: m_Name
@@ -706,6 +736,21 @@ PrefabInstance:
       propertyPath: m_text
       value: Quantity
       objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 1353758359950561204, guid: b0290d81306b0eb4e97acc40b19fbcd6,
         type: 3}
       propertyPath: m_Name
@@ -839,6 +884,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: Availablility
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 141566856104460820, guid: b0290d81306b0eb4e97acc40b19fbcd6,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 1353758359950561204, guid: b0290d81306b0eb4e97acc40b19fbcd6,
         type: 3}
