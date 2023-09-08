@@ -84,8 +84,8 @@
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\Utils\UI\Dragging\IDragSource.cs" />
     <Compile Include="Assets\Scripts\Stats\Stats.cs" />
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\Inventories\ActionItem.cs" />
-    <Compile Include="Assets\Scripts\UI\Quests\QuestTooltipSpawner.cs" />
     <Compile Include="Assets\Scripts\UI\Shops\RowUI.cs" />
+    <Compile Include="Assets\Scripts\UI\Quests\QuestTooltipSpawner.cs" />
     <Compile Include="Assets\Scripts\Combat\WeaponPickup.cs" />
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\Inventories\PickupSpawner.cs" />
     <Compile Include="Assets\Scripts\UI\DamageText\DamageTextSpawner.cs" />
