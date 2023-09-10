@@ -1,4 +1,6 @@
 using GameDevTV.Inventories;
+using System;
+using UnityEngine;
 
 namespace RPG.Shops {
     public class ShopItem {
@@ -12,6 +14,22 @@ namespace RPG.Shops {
             this.availiability = availability;
             this.price = price;
             this.quantityInTransaction = quantityInTransaction;
+        }
+
+        public string GetName() {
+            return item.GetDisplayName();
+        }
+
+        public Sprite GetIcon() {
+            return item.GetIcon();
+        }
+
+        public int GetAvailability() {
+            return availiability;
+        }
+
+        public float GetPrice() {
+            return price;
         }
     }
 }
