@@ -1475,6 +1475,70 @@ PrefabInstance:
       propertyPath: shopName
       value: JimBob's Shop
       objectReference: {fileID: 0}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[0].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 0071fb8ea1b0df04baa6fd317f52b9a2,
+        type: 2}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[1].item
+      value: 
+      objectReference: {fileID: 11400000, guid: d7c0c8d4973a09742a89cdcbcca1bb3a,
+        type: 2}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[2].item
+      value: 
+      objectReference: {fileID: 11400000, guid: 8bb0e49a942820a44af61e0ed9f2993c,
+        type: 2}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[3].item
+      value: 
+      objectReference: {fileID: 11400000, guid: d64a307491012e543995a2eef4f8cf74,
+        type: 2}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[0].initialStock
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[1].initialStock
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[2].initialStock
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[3].initialStock
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[0].buyingDiscountPercentage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[1].buyingDiscountPercentage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5105378220116999552, guid: d58975a063505684487baf418fed175c,
+        type: 3}
+      propertyPath: stockConfig.Array.data[2].buyingDiscountPercentage
+      value: 22.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8602716303282736763, guid: d58975a063505684487baf418fed175c,
         type: 3}
       propertyPath: uniqueIdentifier
@@ -5413,7 +5477,7 @@ PrefabInstance:
     - target: {fileID: 5263524460118599961, guid: 9065ec7e81ca8034a865d6fdd7906af9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -570.7499
+      value: -570.7493
       objectReference: {fileID: 0}
     - target: {fileID: 5263917500653042737, guid: 9065ec7e81ca8034a865d6fdd7906af9,
         type: 3}
