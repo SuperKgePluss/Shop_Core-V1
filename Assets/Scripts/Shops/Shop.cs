@@ -18,12 +18,16 @@ namespace RPG.Shops {
             [Range(0, 100)] public float buyingDiscountPercentage;
         }
 
+        Dictionary<InventoryItem, int> transcation = new Dictionary<InventoryItem, int>();
+
         public event Action onChange;
 
         public IEnumerable<ShopItem> GetFilteredItems() {
             foreach (StockItemConfig config in stockConfig) {
                 float price = config.item.GetPrice() * (1 - config.buyingDiscountPercentage / 100f);
-                yield return new ShopItem(config.item, config.initialStock, price, 0);
+                int quantityInTransaction = 0;
+                transcation.TryGetValue(config.item, out quantityInTransaction);
+                yield return new ShopItem(config.item, config.initialStock, price, quantityInTransaction);
             }
         }
         public void SelectFilter(ItemCategory category) { }
@@ -33,8 +37,19 @@ namespace RPG.Shops {
         public bool CanTransact() { return true; }
         public void ConfirmTransaction() { }
         public float TransactionTotal() { return 0; }
+
         public void AddToTransaction(InventoryItem item, int quantity) {
-            print($"Added to transaction: {item.GetDisplayName()} x {quantity}");
+            if (!transcation.ContainsKey(item)) {
+                transcation[item] = 0;
+            }
+            transcation[item] += quantity;
+            if (transcation[item] <= 0) {
+                transcation.Remove(item);
+            }
+
+            if (onChange != null) {
+                onChange();
+            }
         }
 
         public CursorType GetCursorType() {

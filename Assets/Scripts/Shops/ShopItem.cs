@@ -32,8 +32,12 @@ namespace RPG.Shops {
             return price;
         }
 
-        internal InventoryItem GetInventoryItem() {
+        public InventoryItem GetInventoryItem() {
             return item;
+        }
+
+        public int GetQuantityInTransaction() {
+            return quantityInTransaction;
         }
     }
 }
