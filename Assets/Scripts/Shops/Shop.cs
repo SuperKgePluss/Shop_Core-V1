@@ -28,6 +28,10 @@ namespace RPG.Shops {
         }
 
         public IEnumerable<ShopItem> GetFilteredItems() {
+            return GetAllItems();
+        }
+
+        public IEnumerable<ShopItem> GetAllItems() {
             foreach (StockItemConfig config in stockConfig) {
                 float price = config.item.GetPrice() * (1 - config.buyingDiscountPercentage / 100f);
                 int quantityInTransaction = 0;
@@ -35,6 +39,7 @@ namespace RPG.Shops {
                 yield return new ShopItem(config.item, config.initialStock, price, quantityInTransaction);
             }
         }
+
         public void SelectFilter(ItemCategory category) { }
         public ItemCategory GetFilter() { return ItemCategory.None; }
         public void SelectMode(bool isBuying) { }
@@ -55,7 +60,14 @@ namespace RPG.Shops {
                 }
             }
         }
-        public float TransactionTotal() { return 0; }
+
+        public float TransactionTotal() {
+            float total = 0;
+            foreach (ShopItem item in GetAllItems()) {
+                total += item.GetPrice() * item.GetQuantityInTransaction();
+            }
+            return total;   
+        }
 
         public void AddToTransaction(InventoryItem item, int quantity) {
             if (!transcation.ContainsKey(item)) {
