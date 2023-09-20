@@ -1,5 +1,6 @@
 using GameDevTV.Inventories;
 using RPG.Control;
+using RPG.Inventories;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,15 +48,21 @@ namespace RPG.Shops {
         public bool CanTransact() { return true; }
         public void ConfirmTransaction() {
             Inventory shopperInventory = currentShopper.GetComponent<Inventory>();
-            if (shopperInventory == null) return;
+            Purse shopperPurse = currentShopper.GetComponent<Purse>();
+            if (shopperInventory == null || shopperPurse == null) return;
 
-            var transactionSnapshot = new Dictionary<InventoryItem, int>(transcation);
-            foreach (InventoryItem item in transactionSnapshot.Keys) {
-                int quantity = transactionSnapshot[item];
+            foreach (ShopItem shopItem in GetAllItems()) {
+                InventoryItem item = shopItem.GetInventoryItem();
+                int quantity = shopItem.GetQuantityInTransaction();
+                float price = shopItem.GetPrice();
+
                 for (int i = 0; i < quantity; i++) {
+                    if (shopperPurse.GetBalance() < price) break;
+
                     bool sucess = shopperInventory.AddToFirstEmptySlot(item, 1);
                     if (sucess) {
                         AddToTransaction(item, -1);
+                        shopperPurse.UpdateBalance(-price);
                     }
                 }
             }
@@ -66,7 +73,7 @@ namespace RPG.Shops {
             foreach (ShopItem item in GetAllItems()) {
                 total += item.GetPrice() * item.GetQuantityInTransaction();
             }
-            return total;   
+            return total;
         }
 
         public void AddToTransaction(InventoryItem item, int quantity) {

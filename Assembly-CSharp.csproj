@@ -104,6 +104,7 @@
     <Compile Include="Assets\Scripts\Movement\Mover.cs" />
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\Utils\PeristentObjectSpawner.cs" />
     <Compile Include="Assets\Scripts\UI\DialogueUI.cs" />
+    <Compile Include="Assets\Scripts\Inventories\Purse.cs" />
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\UI\Inventories\InventoryItemIcon.cs" />
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\Inventories\ItemCategory.cs" />
     <Compile Include="Assets\Scripts\Inventories\StatsEquipment.cs" />
