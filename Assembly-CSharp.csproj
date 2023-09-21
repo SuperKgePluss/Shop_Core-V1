@@ -146,6 +146,7 @@
     <Compile Include="Assets\Scripts\UI\DamageText\DamageText.cs" />
     <Compile Include="Assets\Scripts\Combat\EnemyHealthDisplay.cs" />
     <Compile Include="Assets\Scripts\Shops\ShopItem.cs" />
+    <Compile Include="Assets\Scripts\UI\PurseUI.cs" />
     <Compile Include="Assets\Asset Packs\Standard Assets\Environment\Water\Water\Scripts\WaterTile.cs" />
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\Inventories\ItemDropper.cs" />
     <Compile Include="Assets\Scripts\Attributes\HealthDisplay.cs" />
