@@ -20,9 +20,16 @@ namespace RPG.Shops {
         }
 
         Dictionary<InventoryItem, int> transcation = new Dictionary<InventoryItem, int>();
+        Dictionary<InventoryItem, int> stock = new Dictionary<InventoryItem, int>();
         Shopper currentShopper = null;
 
         public event Action onChange;
+
+        void Awake() {
+            foreach (StockItemConfig config in stockConfig) {
+                stock[config.item] = config.initialStock;
+            }
+        }
 
         public void SetShopper(Shopper shopper) {
             this.currentShopper = shopper;
@@ -37,7 +44,8 @@ namespace RPG.Shops {
                 float price = config.item.GetPrice() * (1 - config.buyingDiscountPercentage / 100f);
                 int quantityInTransaction = 0;
                 transcation.TryGetValue(config.item, out quantityInTransaction);
-                yield return new ShopItem(config.item, config.initialStock, price, quantityInTransaction);
+                int currentStock = stock[config.item];
+                yield return new ShopItem(config.item, currentStock, price, quantityInTransaction);
             }
         }
 
@@ -46,6 +54,7 @@ namespace RPG.Shops {
         public void SelectMode(bool isBuying) { }
         public bool IsBuyingMode() { return true; }
         public bool CanTransact() { return true; }
+
         public void ConfirmTransaction() {
             Inventory shopperInventory = currentShopper.GetComponent<Inventory>();
             Purse shopperPurse = currentShopper.GetComponent<Purse>();
@@ -62,9 +71,14 @@ namespace RPG.Shops {
                     bool sucess = shopperInventory.AddToFirstEmptySlot(item, 1);
                     if (sucess) {
                         AddToTransaction(item, -1);
+                        stock[item]--;
                         shopperPurse.UpdateBalance(-price);
                     }
                 }
+            }
+
+            if (onChange != null) {
+                onChange();
             }
         }
 
@@ -80,7 +94,11 @@ namespace RPG.Shops {
             if (!transcation.ContainsKey(item)) {
                 transcation[item] = 0;
             }
-            transcation[item] += quantity;
+            if (transcation[item] + quantity > stock[item]) {
+                transcation[item] = stock[item];
+            } else {
+                transcation[item] += quantity;
+            }
             if (transcation[item] <= 0) {
                 transcation.Remove(item);
             }
