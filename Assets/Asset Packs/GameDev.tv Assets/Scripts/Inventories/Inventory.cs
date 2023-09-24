@@ -2,17 +2,16 @@
 using UnityEngine;
 using GameDevTV.Saving;
 using RPG.Core;
+using System.Collections.Generic;
 
-namespace GameDevTV.Inventories
-{
+namespace GameDevTV.Inventories {
     /// <summary>
     /// Provides storage for the player inventory. A configurable number of
     /// slots are available.
     ///
     /// This component should be placed on the GameObject tagged "Player".
     /// </summary>
-    public class Inventory : MonoBehaviour, ISaveable, IPredicateEvaluator
-    {
+    public class Inventory : MonoBehaviour, ISaveable, IPredicateEvaluator {
         // CONFIG DATA
         [Tooltip("Allowed size")]
         [SerializeField] int inventorySize = 16;
@@ -20,8 +19,7 @@ namespace GameDevTV.Inventories
         // STATE
         InventorySlot[] slots;
 
-        public struct InventorySlot
-        {
+        public struct InventorySlot {
             public InventoryItem item;
             public int number;
         }
@@ -36,8 +34,7 @@ namespace GameDevTV.Inventories
         /// <summary>
         /// Convenience for getting the player's inventory.
         /// </summary>
-        public static Inventory GetPlayerInventory()
-        {
+        public static Inventory GetPlayerInventory() {
             var player = GameObject.FindWithTag("Player");
             return player.GetComponent<Inventory>();
         }
@@ -45,16 +42,39 @@ namespace GameDevTV.Inventories
         /// <summary>
         /// Could this item fit anywhere in the inventory?
         /// </summary>
-        public bool HasSpaceFor(InventoryItem item)
-        {
+        public bool HasSpaceFor(InventoryItem item) {
             return FindSlot(item) >= 0;
+        }
+
+        public bool HasSpaceFor(IEnumerable<InventoryItem> items) {
+            int freeSlots = FreeSlots();
+            List<InventoryItem> stackedItems = new List<InventoryItem>();
+            foreach (var item in items) {
+                if (item.IsStackable()) {
+                    if (HasItem(item)) continue;
+                    if (stackedItems.Contains(item)) continue;
+                    stackedItems.Add(item);
+                }
+                if (freeSlots <= 0) return false;
+                freeSlots--;
+            }
+            return true;
+        }
+
+        public int FreeSlots() {
+            int count = 0;
+            foreach (InventorySlot slot in slots) {
+                if (slot.number == 0) {
+                    count++;
+                }
+            }
+            return count;
         }
 
         /// <summary>
         /// How many slots are in the inventory?
         /// </summary>
-        public int GetSize()
-        {
+        public int GetSize() {
             return slots.Length;
         }
 
@@ -64,19 +84,16 @@ namespace GameDevTV.Inventories
         /// <param name="item">The item to add.</param>
         /// <param name="number">The number to add.</param>
         /// <returns>Whether or not the item could be added.</returns>
-        public bool AddToFirstEmptySlot(InventoryItem item, int number)
-        {
+        public bool AddToFirstEmptySlot(InventoryItem item, int number) {
             int i = FindSlot(item);
 
-            if (i < 0)
-            {
+            if (i < 0) {
                 return false;
             }
 
             slots[i].item = item;
             slots[i].number += number;
-            if (inventoryUpdated != null)
-            {
+            if (inventoryUpdated != null) {
                 inventoryUpdated();
             }
             return true;
@@ -85,12 +102,9 @@ namespace GameDevTV.Inventories
         /// <summary>
         /// Is there an instance of the item in the inventory?
         /// </summary>
-        public bool HasItem(InventoryItem item)
-        {
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (object.ReferenceEquals(slots[i].item, item))
-                {
+        public bool HasItem(InventoryItem item) {
+            for (int i = 0; i < slots.Length; i++) {
+                if (object.ReferenceEquals(slots[i].item, item)) {
                     return true;
                 }
             }
@@ -100,16 +114,14 @@ namespace GameDevTV.Inventories
         /// <summary>
         /// Return the item type in the given slot.
         /// </summary>
-        public InventoryItem GetItemInSlot(int slot)
-        {
+        public InventoryItem GetItemInSlot(int slot) {
             return slots[slot].item;
         }
 
         /// <summary>
         /// Get the number of items in the given slot.
         /// </summary>
-        public int GetNumberInSlot(int slot)
-        {
+        public int GetNumberInSlot(int slot) {
             return slots[slot].number;
         }
 
@@ -117,16 +129,13 @@ namespace GameDevTV.Inventories
         /// Remove a number of items from the given slot. Will never remove more
         /// that there are.
         /// </summary>
-        public void RemoveFromSlot(int slot, int number)
-        {
+        public void RemoveFromSlot(int slot, int number) {
             slots[slot].number -= number;
-            if (slots[slot].number <= 0)
-            {
+            if (slots[slot].number <= 0) {
                 slots[slot].number = 0;
                 slots[slot].item = null;
             }
-            if (inventoryUpdated != null)
-            {
+            if (inventoryUpdated != null) {
                 inventoryUpdated();
             }
         }
@@ -140,23 +149,19 @@ namespace GameDevTV.Inventories
         /// <param name="item">The item type to add.</param>
         /// <param name="number">The number of items to add.</param>
         /// <returns>True if the item was added anywhere in the inventory.</returns>
-        public bool AddItemToSlot(int slot, InventoryItem item, int number)
-        {
-            if (slots[slot].item != null)
-            {
+        public bool AddItemToSlot(int slot, InventoryItem item, int number) {
+            if (slots[slot].item != null) {
                 return AddToFirstEmptySlot(item, number); ;
             }
 
             var i = FindStack(item);
-            if (i >= 0)
-            {
+            if (i >= 0) {
                 slot = i;
             }
 
             slots[slot].item = item;
             slots[slot].number += number;
-            if (inventoryUpdated != null)
-            {
+            if (inventoryUpdated != null) {
                 inventoryUpdated();
             }
             return true;
@@ -164,8 +169,7 @@ namespace GameDevTV.Inventories
 
         // PRIVATE
 
-        private void Awake()
-        {
+        private void Awake() {
             slots = new InventorySlot[inventorySize];
         }
 
@@ -173,11 +177,9 @@ namespace GameDevTV.Inventories
         /// Find a slot that can accomodate the given item.
         /// </summary>
         /// <returns>-1 if no slot is found.</returns>
-        private int FindSlot(InventoryItem item)
-        {
+        private int FindSlot(InventoryItem item) {
             int i = FindStack(item);
-            if (i < 0)
-            {
+            if (i < 0) {
                 i = FindEmptySlot();
             }
             return i;
@@ -187,12 +189,9 @@ namespace GameDevTV.Inventories
         /// Find an empty slot.
         /// </summary>
         /// <returns>-1 if all slots are full.</returns>
-        private int FindEmptySlot()
-        {
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (slots[i].item == null)
-                {
+        private int FindEmptySlot() {
+            for (int i = 0; i < slots.Length; i++) {
+                if (slots[i].item == null) {
                     return i;
                 }
             }
@@ -203,17 +202,13 @@ namespace GameDevTV.Inventories
         /// Find an existing stack of this item type.
         /// </summary>
         /// <returns>-1 if no stack exists or if the item is not stackable.</returns>
-        private int FindStack(InventoryItem item)
-        {
-            if (!item.IsStackable())
-            {
+        private int FindStack(InventoryItem item) {
+            if (!item.IsStackable()) {
                 return -1;
             }
 
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (object.ReferenceEquals(slots[i].item, item))
-                {
+            for (int i = 0; i < slots.Length; i++) {
+                if (object.ReferenceEquals(slots[i].item, item)) {
                     return i;
                 }
             }
@@ -221,19 +216,15 @@ namespace GameDevTV.Inventories
         }
 
         [System.Serializable]
-        private struct InventorySlotRecord
-        {
+        private struct InventorySlotRecord {
             public string itemID;
             public int number;
         }
-    
-        object ISaveable.CaptureState()
-        {
+
+        object ISaveable.CaptureState() {
             var slotStrings = new InventorySlotRecord[inventorySize];
-            for (int i = 0; i < inventorySize; i++)
-            {
-                if (slots[i].item != null)
-                {
+            for (int i = 0; i < inventorySize; i++) {
+                if (slots[i].item != null) {
                     slotStrings[i].itemID = slots[i].item.GetItemID();
                     slotStrings[i].number = slots[i].number;
                 }
@@ -241,26 +232,21 @@ namespace GameDevTV.Inventories
             return slotStrings;
         }
 
-        void ISaveable.RestoreState(object state)
-        {
+        void ISaveable.RestoreState(object state) {
             var slotStrings = (InventorySlotRecord[])state;
-            for (int i = 0; i < inventorySize; i++)
-            {
+            for (int i = 0; i < inventorySize; i++) {
                 slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
                 slots[i].number = slotStrings[i].number;
             }
-            if (inventoryUpdated != null)
-            {
+            if (inventoryUpdated != null) {
                 inventoryUpdated();
             }
         }
 
-        public bool? Evaluate(string predicate, string[] parameters)
-        {
-            switch (predicate)
-            {
-                case "HasInventoryItem":
-                return HasItem(InventoryItem.GetFromID(parameters[0]));
+        public bool? Evaluate(string predicate, string[] parameters) {
+            switch (predicate) {
+            case "HasInventoryItem":
+            return HasItem(InventoryItem.GetFromID(parameters[0]));
             }
 
             return null;
