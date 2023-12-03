@@ -68,6 +68,7 @@
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\UI\Inventories\InventoryDropTarget.cs" />
     <Compile Include="Assets\Scripts\Quests\Quest.cs" />
     <Compile Include="Assets\Scripts\Shops\Shop.cs" />
+    <Compile Include="Assets\Scripts\UI\Shops\FilterButtonUI.cs" />
     <Compile Include="Assets\Asset Packs\Standard Assets\Environment\Water\Water\Scripts\MeshContainer.cs" />
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\Utils\UI\Tooltips\TooltipSpawner.cs" />
     <Compile Include="Assets\Scripts\Combat\CombatTarget.cs" />
