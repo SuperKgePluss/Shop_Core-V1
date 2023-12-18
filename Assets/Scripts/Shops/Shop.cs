@@ -23,18 +23,12 @@ namespace RPG.Shops {
         }
 
         Dictionary<InventoryItem, int> transcation = new Dictionary<InventoryItem, int>();
-        Dictionary<InventoryItem, int> stock = new Dictionary<InventoryItem, int>();
+        Dictionary<InventoryItem, int> stockSold = new Dictionary<InventoryItem, int>();
         Shopper currentShopper = null;
         bool isBuyingMode = true;
         ItemCategory filter = ItemCategory.None;
 
         public event Action onChange;
-
-        void Awake() {
-            foreach (StockItemConfig config in stockConfig) {
-                stock[config.item] = config.initialStock;
-            }
-        }
 
         public void SetShopper(Shopper shopper) {
             this.currentShopper = shopper;
@@ -50,15 +44,16 @@ namespace RPG.Shops {
         }
 
         public IEnumerable<ShopItem> GetAllItems() {
-            int shopperLevel = GetShopperLevel();
-            foreach (StockItemConfig config in stockConfig) {
-                if (config.levelToUnlock > shopperLevel) continue;
+            Dictionary<InventoryItem, float> prices = GetPrices();
+            Dictionary<InventoryItem, int> availabilities = GetAvailabilities();
+            foreach (InventoryItem item in availabilities.Keys) {
+                if (availabilities[item] <= 0) continue;
 
-                float price = GetPrice(config);
+                float price = prices[item];
                 int quantityInTransaction = 0;
-                transcation.TryGetValue(config.item, out quantityInTransaction);
-                int availability = GetAvailability(config.item);
-                yield return new ShopItem(config.item, availability, price, quantityInTransaction);
+                transcation.TryGetValue(item, out quantityInTransaction);
+                int availability = availabilities[item];
+                yield return new ShopItem(item, availability, price, quantityInTransaction);
             }
         }
 
@@ -156,7 +151,10 @@ namespace RPG.Shops {
 
             AddToTransaction(item, -1);
             shopperInventory.RemoveFromSlot(slot, 1);
-            stock[item]++;
+            if (!stockSold.ContainsKey(item)) {
+                stockSold[item] = 0;
+            }
+            stockSold[item]--;
             shopperPurse.UpdateBalance(price);
         }
 
@@ -166,7 +164,10 @@ namespace RPG.Shops {
             bool sucess = shopperInventory.AddToFirstEmptySlot(item, 1);
             if (sucess) {
                 AddToTransaction(item, -1);
-                stock[item]--;
+                if (!stockSold.ContainsKey(item)) {
+                    stockSold[item] = 0;
+                }
+                stockSold[item]++;
                 shopperPurse.UpdateBalance(-price);
             }
         }
@@ -194,7 +195,8 @@ namespace RPG.Shops {
                 transcation[item] = 0;
             }
 
-            int availability = GetAvailability(item);
+            var availabilities = GetAvailabilities();
+            int availability = availabilities[item];
             if (transcation[item] + quantity > availability) {
                 transcation[item] = availability;
             } else {
@@ -226,7 +228,7 @@ namespace RPG.Shops {
 
         private int GetAvailability(InventoryItem item) {
             if (isBuyingMode) {
-                return stock[item];
+                return 0;
             }
             return CountItemInInventory(item);
         }
@@ -255,8 +257,44 @@ namespace RPG.Shops {
         private int GetShopperLevel() {
             BaseStats stats = currentShopper.GetComponent<BaseStats>();
             if (stats == null) return 0;
-            
+
             return stats.GetLevel();
+        }
+
+        private Dictionary<InventoryItem, float> GetPrices() {
+            Dictionary<InventoryItem, float> prices = new Dictionary<InventoryItem, float>();
+
+            foreach (var config in GetAvailableConfigs()) {
+                if (!prices.ContainsKey(config.item)) {
+                    prices[config.item] = config.item.GetPrice();
+                }
+
+                prices[config.item] *= (1 - config.buyingDiscountPercentage / 100f);
+            }
+            return prices;
+        }
+
+        private Dictionary<InventoryItem, int> GetAvailabilities() {
+            Dictionary<InventoryItem, int> availabilities = new Dictionary<InventoryItem, int>();
+
+            foreach (var config in GetAvailableConfigs()) {
+                if (!availabilities.ContainsKey(config.item)) {
+                    int sold = 0;
+                    stockSold.TryGetValue(config.item, out sold);
+                    availabilities[config.item] = -sold;
+                }
+                availabilities[config.item] += config.initialStock;
+            }
+
+            return availabilities;
+        }
+
+        private IEnumerable<StockItemConfig> GetAvailableConfigs() {
+            int shopperLevel = GetShopperLevel();
+            foreach (var config in stockConfig) {
+                if (config.levelToUnlock > shopperLevel) continue;
+                yield return config;
+            }
         }
     }
 }
