@@ -226,13 +226,6 @@ namespace RPG.Shops {
             return shopName;
         }
 
-        private int GetAvailability(InventoryItem item) {
-            if (isBuyingMode) {
-                return 0;
-            }
-            return CountItemInInventory(item);
-        }
-
         private int CountItemInInventory(InventoryItem item) {
             Inventory inventory = currentShopper.GetComponent<Inventory>();
             if (inventory == null) return 0;
@@ -246,14 +239,6 @@ namespace RPG.Shops {
             return total;
         }
 
-        private float GetPrice(StockItemConfig config) {
-            if (isBuyingMode) {
-                return config.item.GetPrice() * (1 - config.buyingDiscountPercentage / 100f);
-            }
-
-            return config.item.GetPrice() * (sellingPercentage / 100f);
-        }
-
         private int GetShopperLevel() {
             BaseStats stats = currentShopper.GetComponent<BaseStats>();
             if (stats == null) return 0;
@@ -265,11 +250,15 @@ namespace RPG.Shops {
             Dictionary<InventoryItem, float> prices = new Dictionary<InventoryItem, float>();
 
             foreach (var config in GetAvailableConfigs()) {
-                if (!prices.ContainsKey(config.item)) {
-                    prices[config.item] = config.item.GetPrice();
-                }
+                if (isBuyingMode) {
+                    if (!prices.ContainsKey(config.item)) {
+                        prices[config.item] = config.item.GetPrice();
+                    }
 
-                prices[config.item] *= (1 - config.buyingDiscountPercentage / 100f);
+                    prices[config.item] *= (1 - config.buyingDiscountPercentage / 100f);
+                } else {
+                    prices[config.item] = config.item.GetPrice() * (sellingPercentage / 100);
+                }
             }
             return prices;
         }
@@ -278,12 +267,16 @@ namespace RPG.Shops {
             Dictionary<InventoryItem, int> availabilities = new Dictionary<InventoryItem, int>();
 
             foreach (var config in GetAvailableConfigs()) {
-                if (!availabilities.ContainsKey(config.item)) {
-                    int sold = 0;
-                    stockSold.TryGetValue(config.item, out sold);
-                    availabilities[config.item] = -sold;
+                if (isBuyingMode) {
+                    if (!availabilities.ContainsKey(config.item)) {
+                        int sold = 0;
+                        stockSold.TryGetValue(config.item, out sold);
+                        availabilities[config.item] = -sold;
+                    }
+                    availabilities[config.item] += config.initialStock;
+                } else {
+                    availabilities[config.item] = CountItemInInventory(config.item);
                 }
-                availabilities[config.item] += config.initialStock;
             }
 
             return availabilities;
