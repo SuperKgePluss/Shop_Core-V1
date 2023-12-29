@@ -1,4 +1,5 @@
 using GameDevTV.Inventories;
+using GameDevTV.Saving;
 using RPG.Control;
 using RPG.Inventories;
 using RPG.Stats;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Shops {
-    public class Shop : MonoBehaviour, IRaycastable {
+    public class Shop : MonoBehaviour, IRaycastable, ISaveable {
         [SerializeField] string shopName;
         [SerializeField, Range(0, 100)] float sellingPercentage = 80f;
 
@@ -287,6 +288,23 @@ namespace RPG.Shops {
             foreach (var config in stockConfig) {
                 if (config.levelToUnlock > shopperLevel) continue;
                 yield return config;
+            }
+        }
+
+        public object CaptureState() {
+            Dictionary<string, int> saveObject = new Dictionary<string, int>();
+            foreach (var pair in stockSold) {
+                saveObject[pair.Key.GetItemID()] = pair.Value;
+            }
+
+            return saveObject;
+        }
+
+        public void RestoreState(object state) {
+            Dictionary<string, int> saveObject = (Dictionary<string, int>) state;
+            stockSold.Clear();
+            foreach (var pair in saveObject) {
+                stockSold[InventoryItem.GetFromID(pair.Key)] = pair.Value;
             }
         }
     }
