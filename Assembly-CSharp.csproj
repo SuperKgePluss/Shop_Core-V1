@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\Combat\WeaponPickup.cs" />
     <Compile Include="Assets\Asset Packs\GameDev.tv Assets\Scripts\Inventories\PickupSpawner.cs" />
     <Compile Include="Assets\Scripts\UI\DamageText\DamageTextSpawner.cs" />
+    <Compile Include="Assets\Scripts\Abilities\Ability.cs" />
     <Compile Include="Assets\Scripts\UI\Quests\QuestItemUI.cs" />
     <Compile Include="Assets\Scripts\Quests\QuestCompletion.cs" />
     <Compile Include="Assets\Scripts\Dialogue\Dialogue.cs" />
